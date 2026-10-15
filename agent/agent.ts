@@ -6,8 +6,8 @@
  *   2. If Gemini wants to call a tool -> run it, send back the result, repeat.
  *   3. If Gemini answers with text -> done.
  */
-import { GoogleGenAI, type Content, type Part } from "@google/genai";
-import { MODEL } from "@/lib/gemini";
+import { type Content, type Part } from "@google/genai";
+import { generate, MODEL } from "@/lib/gemini";
 import { tools } from "./tools";
 
 export { MODEL };
@@ -32,7 +32,6 @@ export type ChatMessage = { role: "user" | "agent"; text: string };
 export type Step = { tool: string; args: unknown; result: unknown; error?: boolean };
 
 export async function runAgent(history: ChatMessage[], ctx: { baseUrl: string }) {
-  const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
   const contents: Content[] = history.map((m) => ({
     role: m.role === "user" ? "user" : "model",
     parts: [{ text: m.text }],
@@ -40,8 +39,7 @@ export async function runAgent(history: ChatMessage[], ctx: { baseUrl: string })
   const steps: Step[] = [];
 
   for (let i = 0; i < MAX_STEPS; i++) {
-    const response = await ai.models.generateContent({
-      model: MODEL,
+    const response = await generate({
       contents,
       config: {
         systemInstruction: SYSTEM_PROMPT,

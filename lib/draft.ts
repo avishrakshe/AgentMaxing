@@ -36,7 +36,11 @@ export function clampSpec(spec: Partial<PosterSpec> & { title: string }, base: P
     template: spec.template ?? "announcement",
     title: chars(words(spec.title, 8), 64),
     subtitle: chars(words(spec.subtitle, 14), 100),
-    facts: (spec.facts ?? []).slice(0, 3).map((f) => chars(f, 42)),
+    // The hackathon template shows the prize as its headline, so don't repeat it as a bullet.
+    facts: (spec.facts ?? [])
+      .filter((f) => !(spec.template === "hackathon" && spec.prize && f.toLowerCase().includes(spec.prize.toLowerCase().split(" ")[0])))
+      .slice(0, 3)
+      .map((f) => chars(f, 42)),
     dateIST: spec.dateIST ? chars(spec.dateIST, 36) : undefined,
     deadlineISO: spec.deadlineISO && /^\d{4}-\d{2}-\d{2}/.test(spec.deadlineISO) ? spec.deadlineISO.slice(0, 10) : undefined,
     cta: chars(words(spec.cta, 4), 22),
