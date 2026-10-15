@@ -3,7 +3,7 @@
  *
  * One tiny interface, two adapters:
  *   - JSON file (.data/store.json) for local dev (/tmp on Vercel, ephemeral)
- *   - Upstash Redis (one hash per collection) when UPSTASH_REDIS_REST_URL is set
+ *   - Upstash Redis (one hash per collection) when UPSTASH_REDIS_REST_URL (or KV_REST_API_URL) is set
  *
  * Chat tools, the dashboard and /api/cycle all share it.
  */
@@ -77,8 +77,12 @@ class FileStore implements Store {
 }
 
 // ─── Upstash Redis adapter ───
+// The Vercel Marketplace integration sets KV_REST_API_*; a manual Upstash setup uses UPSTASH_REDIS_REST_*.
+const REDIS_URL = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
+const REDIS_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
+
 class RedisStore implements Store {
-  private redis = new Redis({ url: process.env.UPSTASH_REDIS_REST_URL!, token: process.env.UPSTASH_REDIS_REST_TOKEN! });
+  private redis = new Redis({ url: REDIS_URL!, token: REDIS_TOKEN! });
   private key = (col: Col) => `crier:${col}`;
 
   async list<C extends Col>(col: C) {
@@ -98,10 +102,10 @@ class RedisStore implements Store {
 
 let instance: Store | null = null;
 export function store(): Store {
-  return (instance ??= process.env.UPSTASH_REDIS_REST_URL ? new RedisStore() : new FileStore());
+  return (instance ??= REDIS_URL ? new RedisStore() : new FileStore());
 }
 
-export const storeKind = () => (process.env.UPSTASH_REDIS_REST_URL ? "upstash" : "file");
+export const storeKind = () => (REDIS_URL ? "upstash" : "file");
 
 export function newId(prefix: string) {
   return `${prefix}_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;

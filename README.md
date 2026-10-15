@@ -18,7 +18,7 @@ Built for **Agentmaxxing × Rise In, Week 1** on the [agentmaxxin](https://www.n
 | Captions (EN / Hinglish / Hindi) + 4 poster templates | ✅ Done |
 | Review dashboard (approve / edit / reject / publish, spend card) | ✅ Done |
 | Publish as share package (caption + poster + `wa.me`) | ✅ Done |
-| Vercel deployment | ✅ Live at https://crier-lovat.vercel.app, full chat flow verified in production (state in `/tmp` until Upstash Redis is attached) |
+| Vercel deployment | ✅ Live at https://crier-lovat.vercel.app with Upstash Redis, full chat flow verified in production |
 | wa-bridge (Baileys) | 🟡 Boots, `/health` + QR work; sending not tested end to end (needs a dedicated number) |
 | Real X data (fetcher.sh x402 on Base mainnet) | ⏳ Phase 3, adapter stubbed |
 | Demo GIF | ⏳ To record |
@@ -117,7 +117,7 @@ Locally, state lives in `.data/store.json`. Set `UPSTASH_REDIS_REST_URL` and `UP
 ### Deploy to Vercel
 
 1. Push to GitHub and import the repo in Vercel (or `vercel link` + `vercel deploy --prod`).
-2. Add **Upstash Redis** from the Vercel Marketplace (Storage tab, or `vercel integration add upstash/upstash-kv`) and make sure `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` are set. Without it the app falls back to `/tmp` on Vercel, which works for a demo but is wiped between instances.
+2. Add **Upstash Redis** from the Vercel Marketplace (Storage tab, or `vercel integration add upstash/upstash-kv`) The integration sets `KV_REST_API_URL` / `KV_REST_API_TOKEN`, which the store reads (as does `UPSTASH_REDIS_REST_URL` / `_TOKEN`). Without it the app falls back to `/tmp` on Vercel, which works for a demo but is wiped between instances.
 3. Set `GEMINI_API_KEY`, `GEMINI_MODEL`, `WALLET_PRIVATE_KEY` (a **test** key; the filesystem isn't persistent so "Create wallet" won't stick) and `CYCLE_SECRET`.
 4. Use the **production** URL for the demo. The agent pays its own origin's `/api/x-feed`, so Deployment Protection on that URL would block the x402 call. If you protect it, add auth to the dashboard instead.
 
@@ -133,7 +133,7 @@ Locally, state lives in `.data/store.json`. Set `UPSTASH_REDIS_REST_URL` and `UP
 | `DAILY_BUDGET_USD` | `0.50` | hard daily cap on x402 spend (IST day) |
 | `MAX_PRICE_PER_CALL_USD` | `0.01` | refuse any single call above this |
 | `RELEVANCE_THRESHOLD` | `60` | triage drop line |
-| `UPSTASH_REDIS_REST_URL` / `_TOKEN` | | production store |
+| `UPSTASH_REDIS_REST_URL` / `_TOKEN` | | production store (or `KV_REST_API_URL` / `_TOKEN` from the Vercel integration) |
 | `CYCLE_SECRET` | | Bearer for `POST /api/cycle` |
 | `WA_BRIDGE_URL` / `BRIDGE_SECRET` | | Phase 2 bridge |
 | `POSTER_AI_BACKGROUND` | `false` | Gemini image background (falls back silently) |
