@@ -31,6 +31,7 @@ POSTER SPEC RULES (poster text is always English, Roman script)
 - template: "hackathon" for hackathons/buildathons, "event" for meetups/IRL events/AMAs with a date, "digest" for multi-item roundups, otherwise "announcement".
 - title: at most 8 words. subtitle: at most 14 words. facts: at most 3 short facts (each under 40 characters).
 - dateIST: short date like "Sat, 24 Oct · 6:00 PM IST" only if the source has a date, else omit.
+- deadlineISO: YYYY-MM-DD of the registration/submission/application deadline in IST, only if stated.
 - prize: only for hackathons, e.g. "$50,000 in prizes", only if stated.
 - items: only for digest, 3-6 one-line headlines under 60 characters.
 - cta: 2-4 words, e.g. "Register now", "Apply by 15 Nov".`;

@@ -57,6 +57,8 @@ export type PosterSpec = {
   subtitle: string;
   facts: string[];
   dateIST?: string;
+  /** YYYY-MM-DD, for the hackathon "deadline in N days" chip. */
+  deadlineISO?: string;
   cta: string;
   sourceHandle: string;
   ecosystem?: string;
