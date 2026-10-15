@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useCallback, useEffect, useState } from "react";
 import { Check, Copy, Download, ExternalLink, Loader2, Play, Plus, RefreshCw, Send, Trash2, X } from "lucide-react";
@@ -56,12 +56,12 @@ export default function Dashboard() {
         <div className="flex flex-wrap items-center justify-between gap-3">
           <Label>
             <img src="/risein-logo.svg" alt="Rise In" className="mr-3 h-5 w-auto" />
-            <span className="text-foreground">/ Agentmaxxing</span>&nbsp;Â· Crier
+            <span className="text-foreground">/ Agentmaxxing</span>&nbsp;· Crier
           </Label>
           <div className="flex items-center gap-4">
             {state && (
               <Label>
-                Store: {state.config.store} Â· X: {state.config.xSource} Â· Bridge: {state.config.bridge ? "on" : "off"}
+                Store: {state.config.store} · X: {state.config.xSource} · Bridge: {state.config.bridge ? "on" : "off"}
               </Label>
             )}
             <Nav active="dashboard" />
@@ -114,7 +114,7 @@ export default function Dashboard() {
                 </button>
               ))}
             </div>
-            {!state && <p className="text-muted-foreground">Loadingâ€¦</p>}
+            {!state && <p className="text-muted-foreground">Loading…</p>}
             {state && drafts.length === 0 && (
               <p className="py-12 text-center text-muted-foreground">
                 No drafts here. Add a source and a group, then <span className="text-foreground">Run cycle now</span> or ask the chat agent to fetch and draft.
@@ -146,7 +146,7 @@ function SpendCard({ spend }: { spend: State["spend"] }) {
           <div className={cn("h-2", pct > 90 ? "bg-destructive" : "bg-primary")} style={{ width: `${pct}%` }} />
         </div>
         <p className="font-mono text-xs text-muted-foreground uppercase">
-          {spend.callsToday} paid calls Â· max ${spend.maxPricePerCallUsd}/call Â· ${spend.remainingUsd.toFixed(3)} left
+          {spend.callsToday} paid calls · max ${spend.maxPricePerCallUsd}/call · ${spend.remainingUsd.toFixed(3)} left
         </p>
         <div className="flex flex-col border-t pt-3">
           <p className="mb-2 font-mono text-xs text-muted-foreground uppercase">Last payments (Base Sepolia, x402)</p>
@@ -270,7 +270,7 @@ function GroupsCard({ groups, ecosystems, onChange }: { groups: Group[]; ecosyst
             <div className="min-w-0">
               <p className="font-bold">{g.name}</p>
               <p className="font-mono text-xs text-muted-foreground">
-                {g.ecosystems.join(", ")} â†’ {g.language} Â· {g.mode} Â· max {g.maxPerDay}/day
+                {g.ecosystems.join(", ")} → {g.language} · {g.mode} · max {g.maxPerDay}/day
               </p>
               <p className="truncate font-mono text-xs text-muted-foreground">jid: {g.jid ?? "not linked (manual share)"}</p>
             </div>
@@ -360,13 +360,13 @@ function DraftCard({ draft, bust, onChange }: { draft: DraftRow; bust: number; o
           <Badge className={cn("font-mono uppercase", STATUS_STYLE[draft.status])}>{draft.status}</Badge>
           <span className="font-bold">{draft.groupName}</span>
           <span className="font-mono text-xs text-muted-foreground uppercase">
-            {draft.ecosystem} Â· {draft.category} Â· rel {draft.relevance} Â· {draft.urgency} Â· {draft.posterSpec.template}
+            {draft.ecosystem} · {draft.category} · rel {draft.relevance} · {draft.urgency} · {draft.posterSpec.template}
           </span>
         </div>
         {draft.flags.length > 0 && (
           <ul className="flex flex-col gap-1 border border-destructive/50 bg-destructive/10 p-2 font-mono text-xs text-destructive">
             {draft.flags.map((f) => (
-              <li key={f}>âš  {f}</li>
+              <li key={f}>⚠ {f}</li>
             ))}
           </ul>
         )}
