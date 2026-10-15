@@ -4,8 +4,24 @@
 
 Built for **Agentmaxxing × Rise In, Week 1** on the [agentmaxxin](https://www.npmjs.com/package/agentmaxxin) starter (Next.js + Google Gemini + an agent wallet on Base Sepolia).
 
-- **Live agent:** `<VERCEL_URL>` (chat at `/`, review queue at `/dashboard`)
+- **Live agent:** https://crier-lovat.vercel.app (chat at `/`, review queue at [`/dashboard`](https://crier-lovat.vercel.app/dashboard))
 - **Demo GIF:** `docs/demo.gif` _(to be recorded)_
+
+## Submission status
+
+| Area | Status |
+|---|---|
+| Chat agent (Gemini tool loop, 17 tools) | ✅ Done, verified live: `add_source → fetch_updates → get_spend_report`, `add_group → triage_updates → draft_post` |
+| x402 paid X feed + agent wallet (Base Sepolia) | ✅ Done: unpaid call returns 402, the agent signs and pays 0.002 USDC per call, logged against the daily budget |
+| Budget guard (per-call cap, daily IST cap) | ✅ Done |
+| Triage, dedupe, scam guard (look-alike domains, shorteners, prompt injection) | ✅ Done: fake airdrop / free-mint fixtures are flagged |
+| Captions (EN / Hinglish / Hindi) + 4 poster templates | ✅ Done |
+| Review dashboard (approve / edit / reject / publish, spend card) | ✅ Done |
+| Publish as share package (caption + poster + `wa.me`) | ✅ Done |
+| Vercel deployment | ✅ Live at https://crier-lovat.vercel.app, full chat flow verified in production (state in `/tmp` until Upstash Redis is attached) |
+| wa-bridge (Baileys) | 🟡 Boots, `/health` + QR work; sending not tested end to end (needs a dedicated number) |
+| Real X data (fetcher.sh x402 on Base mainnet) | ⏳ Phase 3, adapter stubbed |
+| Demo GIF | ⏳ To record |
 
 ## The problem
 
@@ -100,17 +116,18 @@ Locally, state lives in `.data/store.json`. Set `UPSTASH_REDIS_REST_URL` and `UP
 
 ### Deploy to Vercel
 
-1. Push to GitHub and import the repo in Vercel (or `vercel deploy`).
-2. Add **Upstash Redis** from the Vercel Marketplace (Storage tab) and make sure `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` are set.
-3. Set `GEMINI_API_KEY`, `WALLET_PRIVATE_KEY` (a **test** key; the filesystem isn't persistent so "Create wallet" won't stick) and `CYCLE_SECRET`.
-4. Optional: turn on Vercel Deployment Protection. The dashboard has no login of its own.
+1. Push to GitHub and import the repo in Vercel (or `vercel link` + `vercel deploy --prod`).
+2. Add **Upstash Redis** from the Vercel Marketplace (Storage tab, or `vercel integration add upstash/upstash-kv`) and make sure `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` are set. Without it the app falls back to `/tmp` on Vercel, which works for a demo but is wiped between instances.
+3. Set `GEMINI_API_KEY`, `GEMINI_MODEL`, `WALLET_PRIVATE_KEY` (a **test** key; the filesystem isn't persistent so "Create wallet" won't stick) and `CYCLE_SECRET`.
+4. Use the **production** URL for the demo. The agent pays its own origin's `/api/x-feed`, so Deployment Protection on that URL would block the x402 call. If you protect it, add auth to the dashboard instead.
 
 ### Environment
 
 | Var | Default | Purpose |
 |---|---|---|
 | `GEMINI_API_KEY` | | required |
-| `GEMINI_MODEL` | `gemini-flash-latest` | chat + structured calls |
+| `GEMINI_MODEL` | `gemini-flash-latest` | chat + structured calls (`gemini-3.8-flash` recommended) |
+| `GEMINI_FALLBACK_MODEL` | `gemini-flash-lite-latest` | used on 429/503/timeouts |
 | `WALLET_PRIVATE_KEY` | | agent wallet (required on Vercel) |
 | `X_SOURCE` | `mock` | `mock` \| `fetcher` (Phase 3) \| `official` (X API v2 + `X_BEARER_TOKEN`) |
 | `DAILY_BUDGET_USD` | `0.50` | hard daily cap on x402 spend (IST day) |

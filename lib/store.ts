@@ -2,7 +2,7 @@
  * CRIER'S STORE
  *
  * One tiny interface, two adapters:
- *   - JSON file (.data/store.json) for local dev
+ *   - JSON file (.data/store.json) for local dev (/tmp on Vercel, ephemeral)
  *   - Upstash Redis (one hash per collection) when UPSTASH_REDIS_REST_URL is set
  *
  * Chat tools, the dashboard and /api/cycle all share it.
@@ -32,7 +32,8 @@ export interface Store {
 
 // ─── JSON file adapter ───
 class FileStore implements Store {
-  private file = path.join(process.cwd(), ".data", "store.json");
+  // Vercel's deploy dir is read-only; /tmp is writable but ephemeral (per instance). Use Upstash for real persistence.
+  private file = process.env.VERCEL ? path.join("/tmp", "crier", "store.json") : path.join(process.cwd(), ".data", "store.json");
   private queue: Promise<unknown> = Promise.resolve();
 
   private read(): Record<string, Record<string, unknown>> {

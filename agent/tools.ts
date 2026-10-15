@@ -167,7 +167,12 @@ export const tools: Tool[] = [
       },
       required: ["groupId"],
     },
-    run: async ({ groupId, updateIds }) => draftPosts({ groupId, updateIds }),
+    run: async ({ groupId, updateIds }, { baseUrl }) => {
+      const res = await draftPosts({ groupId, updateIds });
+      // Hand back real poster URLs so the model never has to guess the route.
+      if (!("drafts" in res) || !res.drafts) return res;
+      return { ...res, drafts: res.drafts.map((d) => ({ ...d, posterUrl: posterUrl(baseUrl, d.draftId) })) };
+    },
   },
   {
     name: "render_poster",
