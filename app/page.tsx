@@ -19,6 +19,7 @@ import { Card, CardAction, CardContent, CardFooter, CardHeader } from "@/compone
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Code, Label, Nav, SectionTitle } from "@/components/bits";
 import { cn } from "@/lib/utils";
 
 type Step = { tool: string; args: unknown; result: any; error?: boolean };
@@ -26,7 +27,12 @@ type Message = { role: "user" | "agent"; text: string; steps?: Step[]; error?: b
 type Status = { hasApiKey: boolean; model: string; tools: { name: string; description: string }[] };
 type WalletInfo = { address: string | null; balance?: string };
 
-const EXAMPLES = ["What's the weather in Mumbai?", "What's in your wallet?", "Roll a 20 sided dice"];
+const EXAMPLES = [
+  "Add Nebula Chain as an ecosystem, follow its List, allowed domain nebulachain.xyz",
+  "Fetch updates for Nebula Chain",
+  "Triage and draft posts for my 'Nebula India' group in Hinglish",
+  "What did you spend today?",
+];
 
 export default function Home() {
   const [status, setStatus] = useState<Status | null>(null);
@@ -86,15 +92,18 @@ export default function Home() {
         <div className="flex flex-wrap items-center justify-between gap-3">
           <Label>
             <img src="/risein-logo.svg" alt="Rise In" className="mr-3 h-5 w-auto" />
-            <span className="text-foreground">/ Agentmaxxing</span>&nbsp;starter kit
+            <span className="text-foreground">/ Agentmaxxing</span>&nbsp;· Crier
           </Label>
-          {status && <Label>Model: {status.model}</Label>}
+          <div className="flex items-center gap-4">
+            {status && <Label>Model: {status.model}</Label>}
+            <Nav active="chat" />
+          </div>
         </div>
         <h1 className="text-5xl leading-[0.9] font-bold tracking-[-0.045em] uppercase md:text-7xl">
-          Agentic <span className="text-primary">starter.</span>
+          Crier<span className="text-primary">.</span>
         </h1>
         <p className="max-w-xl text-lg text-muted-foreground">
-          An AI agent that uses your tools and pays for APIs with its own wallet.
+          Watches X for your ecosystems, drafts WhatsApp posts + posters for your approval, and pays for its own data.
         </p>
       </header>
 
@@ -180,7 +189,7 @@ export default function Home() {
                       {!ready
                         ? "Add your Gemini API key to start."
                         : wallet && !wallet.address
-                          ? "Tip: create a wallet first so the agent can pay for the weather API."
+                          ? "Tip: create a wallet first so the agent can pay for X data."
                           : "Pick an example to start."}
                     </p>
                   </div>
@@ -251,23 +260,6 @@ export default function Home() {
       </div>
     </main>
   );
-}
-
-function Label({ children }: { children: React.ReactNode }) {
-  return <p className="flex items-center font-mono text-xs font-medium tracking-[0.06em] text-muted-foreground uppercase">{children}</p>;
-}
-
-function SectionTitle({ num, title }: { num: string; title: string }) {
-  return (
-    <p className="font-mono text-xs font-medium tracking-[0.06em] uppercase">
-      <span className="text-primary">{num}</span>
-      <span className="ml-3 text-muted-foreground">{title}</span>
-    </p>
-  );
-}
-
-function Code({ children }: { children: React.ReactNode }) {
-  return <code className="bg-muted px-1 py-0.5 font-mono text-[0.85em] text-foreground">{children}</code>;
 }
 
 function SetupStep(props: { number: number; title: string; done: boolean; last?: boolean; children: React.ReactNode }) {
