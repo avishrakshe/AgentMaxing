@@ -11,3 +11,4 @@ wa-bridge/dist
 next-env.d.ts
 *.tsbuildinfo
 .DS_Store
+wa-bridge/.env
