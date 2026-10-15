@@ -1,0 +1,46 @@
+{
+  "ecosystem": "Orbit L2",
+  "listId": "1790000000000000002",
+  "tweets": [
+    {
+      "id": "1846000000000000201",
+      "author": "OrbitL2",
+      "text": "Orbit v2 upgrade goes live Oct 20, 2026 at 14:00 UTC. 40% lower fees and 2s blocks. No action needed for users; node operators please upgrade: https://orbitl2.io/v2",
+      "createdAt": "2026-10-14T08:00:00Z",
+      "links": ["https://orbitl2.io/v2"],
+      "media": []
+    },
+    {
+      "id": "1846000000000000202",
+      "author": "OrbitL2",
+      "text": "Orbit Hacker House Bengaluru, Nov 14-16, 2026. 3 days, 60 builders, $20,000 prize pool. Applications close Oct 31. Apply: https://orbitl2.io/hackerhouse",
+      "createdAt": "2026-10-14T11:00:00Z",
+      "links": ["https://orbitl2.io/hackerhouse"],
+      "media": []
+    },
+    {
+      "id": "1846000000000000203",
+      "author": "OrbitL2",
+      "text": "Excited to team up with @NebulaChain on native bridging between our networks. Rolling out in November: https://orbitl2.io/blog/nebula",
+      "createdAt": "2026-10-15T05:05:00Z",
+      "links": ["https://orbitl2.io/blog/nebula"],
+      "media": []
+    },
+    {
+      "id": "1846000000000000204",
+      "author": "OrbitBuilders",
+      "text": "Last 48 hours to apply for the Orbit Builder Fellowship: 8 weeks, $5,000 stipend, mentorship from core devs. Deadline Oct 17, 2026: https://orbitl2.io/fellowship",
+      "createdAt": "2026-10-15T06:00:00Z",
+      "links": ["https://orbitl2.io/fellowship"],
+      "media": []
+    },
+    {
+      "id": "1846000000000000205",
+      "author": "OrbitBuilders",
+      "text": "rollups go brrr 🌀",
+      "createdAt": "2026-10-15T08:00:00Z",
+      "links": [],
+      "media": []
+    }
+  ]
+}

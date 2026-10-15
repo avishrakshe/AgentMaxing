@@ -43,6 +43,7 @@ export type Update = {
   createdAt: string;
   links: string[];
   media: string[];
+  inReplyTo?: string;
   /** Pipeline state (addition to the spec). */
   status: "new" | "triaged" | "skipped" | "drafted" | "error";
   triage?: Triage;

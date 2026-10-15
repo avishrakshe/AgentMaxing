@@ -53,13 +53,20 @@ export async function getWalletBalance() {
   return `${formatEther(wei)} ETH`;
 }
 
-/** Fetch a URL. If it asks for payment (402), sign one with the wallet and try again. */
-export async function payAndFetch(url: string) {
+export type PaymentChallenge = { price: string; asset: string; payTo: Address };
+
+/**
+ * Fetch a URL. If it asks for payment (402), sign one with the wallet and try again.
+ * `beforePay` sees the price before anything is signed and can throw to refuse (used by lib/budget.ts).
+ */
+export async function payAndFetch(url: string, opts: { beforePay?: (c: PaymentChallenge) => void | Promise<void> } = {}) {
   const first = await fetch(url);
   if (first.status !== 402) return { data: await first.json() };
 
+  const challenge: PaymentChallenge = await first.json();
+  await opts.beforePay?.(challenge);
   const account = requireAccount();
-  const { price, asset, payTo } = await first.json();
+  const { price, asset, payTo } = challenge;
   const payment: Payment = {
     from: account.address,
     to: payTo,
@@ -74,7 +81,7 @@ export async function payAndFetch(url: string) {
   const paid = await fetch(url, { headers: { "X-PAYMENT": header } });
   return {
     data: await paid.json(),
-    payment: { status: paid.status, amount: `${price} ${asset}`, to: payTo, signature: `${signature.slice(0, 18)}...` },
+    payment: { status: paid.status, amount: `${price} ${asset}`, to: payTo, from: account.address, signature: `${signature.slice(0, 18)}...` },
   };
 }
 
